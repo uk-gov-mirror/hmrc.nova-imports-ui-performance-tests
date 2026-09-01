@@ -14,25 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.perftests.nova
+package uk.gov.hmrc.perftests.nova.simulation
 
 import uk.gov.hmrc.performance.simulation.PerformanceTestRunner
-import uk.gov.hmrc.perftests.nova.AuthLoginRequests._
-import uk.gov.hmrc.perftests.nova.IndividualImportingFromOutsideEUJourneyRequests._
-
-class NovaSimulation extends PerformanceTestRunner {
-
-  setup(
-    "individual-importing-from-outside-eu-journey",
-    "Individual notifying vehicle import from outside EU"
-  ) withRequests (
-    navigateToAuth,
-    authLogInAsIndividual,
-    getStartPage,
-    getVehicleFromEUPage,
-    postVehicleFromEUPageAsNo,
-    getVehicleOutsideEUPage
-  )
+class NovaSimulation extends PerformanceTestRunner with IndividualUserSimulation {
 
   runSimulation()
 }

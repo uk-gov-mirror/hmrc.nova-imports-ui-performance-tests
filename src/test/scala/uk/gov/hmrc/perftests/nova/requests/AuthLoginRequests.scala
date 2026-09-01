@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.perftests.nova
+package uk.gov.hmrc.perftests.nova.requests
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
@@ -29,12 +29,10 @@ object AuthLoginRequests extends BaseRequest {
       .check(saveCsrfToken())
       .check(regex("Authority Wizard").exists)
 
-  private val startPageUrl: String = s"$baseUrl$route/start"
-
   val authLogInAsIndividual: HttpRequestBuilder =
     http("Login as Individual User")
       .post(authLoginStubUrl)
-      .formParam("redirectionUrl", startPageUrl)
+      .formParam("redirectionUrl", s"$baseUrl$route")
       .formParam("csrfToken", csrfTokenExpr)
       .formParam("authorityId", "")
       .formParam("credentialStrength", "strong")
@@ -45,5 +43,5 @@ object AuthLoginRequests extends BaseRequest {
       .formParam("enrolment[0].taxIdentifier[0].value", "")
       .formParam("enrolment[0].state", "Activated")
       .check(status.is(303))
-      .check(header("Location").is(s"$baseUrl$route/start"))
+      .check(header("Location").is(s"$baseUrl$route"))
 }

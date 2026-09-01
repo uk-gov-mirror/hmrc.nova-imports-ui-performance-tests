@@ -14,41 +14,44 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.perftests.nova
+package uk.gov.hmrc.perftests.nova.requests
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.http.request.builder.HttpRequestBuilder
 
-object IndividualImportingFromOutsideEUJourneyRequests extends BaseRequest {
+object InitialQuestionsRequests extends BaseRequest {
 
-  val getStartPage: HttpRequestBuilder =
-    http("Navigate to Start Page")
-      .get(s"$baseUrl$route/start")
-      .check(status.is(303))
+  private val vehicleFromEUPage                      = s"$route/vehicle-from-eu-to-northern-ireland"
+  private val vehicleOutsideEUPage                   = s"$route/vehicle-outside-eu-to-northern-ireland"
+  private val NotifyingAsBusinessOrPrivateIndividual = s"$route/business-or-private-individual"
 
   val getVehicleFromEUPage: HttpRequestBuilder =
     http("Navigate to Vehicle from EU page")
-      .get(s"$baseUrl$route/vehicle-from-eu")
+      .get(s"$baseUrl$vehicleFromEUPage")
       .check(status.is(200))
       .check(saveCsrfToken())
-      .check(
-        regex(
-          "Are you completing a notification for a vehicle brought into Northern Ireland from an EU country\\?"
-        ).exists
-      )
+      .check(regex("Notifying for a vehicle brought into Northern Ireland").exists)
 
   val postVehicleFromEUPageAsNo: HttpRequestBuilder =
-    http("Submit Vehicle from EU page as No")
-      .post(s"$baseUrl$route/vehicle-from-eu")
+    http("Submit No on Vehicle from EU page")
+      .post(s"$baseUrl$vehicleFromEUPage")
       .formParam("csrfToken", csrfTokenExpr)
       .formParam("value", "false")
       .check(status.is(303))
-      .check(header("Location").is(s"$route/vehicle-outside-eu"))
+      .check(header("Location").is(vehicleOutsideEUPage))
+
+  val postVehicleFromEUPageAsYes: HttpRequestBuilder =
+    http("Submit Yes on Vehicle from EU page")
+      .post(s"$baseUrl$vehicleFromEUPage")
+      .formParam("csrfToken", csrfTokenExpr)
+      .formParam("value", "true")
+      .check(status.is(303))
+      .check(header("Location").is(NotifyingAsBusinessOrPrivateIndividual))
 
   val getVehicleOutsideEUPage: HttpRequestBuilder =
     http("Navigate to Vehicle from Outside EU page")
-      .get(s"$baseUrl$route/vehicle-outside-eu")
+      .get(s"$baseUrl$vehicleOutsideEUPage")
       .check(status.is(200))
-      .check(regex("If you’ve brought a vehicle into Northern Ireland from outside the EU").exists)
+      .check(regex("If you’ve brought a vehicle into Northern Ireland from outside an EU country").exists)
 }

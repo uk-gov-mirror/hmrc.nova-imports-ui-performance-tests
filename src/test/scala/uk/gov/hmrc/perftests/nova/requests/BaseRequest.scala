@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.perftests.nova
+package uk.gov.hmrc.perftests.nova.requests
 
 import io.gatling.core.Predef._
 import io.gatling.core.check.CheckBuilder
@@ -23,10 +23,10 @@ import uk.gov.hmrc.performance.conf.ServicesConfiguration
 
 trait BaseRequest extends ServicesConfiguration {
 
-  val baseUrl: String          = baseUrlFor("nova-imports-notification-frontend")
-  val route: String            = "/nova-imports"
   val authUrl: String          = baseUrlFor("auth-login-stub")
   val authLoginStubUrl: String = s"$authUrl/auth-login-stub/gg-sign-in"
+  val baseUrl: String          = baseUrlFor("nova-imports-notification-frontend")
+  val route: String            = "/nova-imports"
 
   val CsrfPattern = """<input type="hidden" name="csrfToken" value="([^"]+)""""
 
