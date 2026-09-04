@@ -25,26 +25,26 @@ object StartNotificationRequests extends BaseRequest {
   private val landingPage           = s"$route/notification-of-vehicle-arrivals"
   private val beforeYouContinuePage = s"$route/before-you-continue"
 
-  val getNovaEntryPoint: HttpRequestBuilder =
+  val navigateToNovaEntryPoint: HttpRequestBuilder =
     http("Navigate to NoVA service")
       .get(s"$baseUrl$route")
       .check(status.is(303))
       .check(header("Location").is(landingPage))
 
-  val getLandingPage: HttpRequestBuilder =
+  val navigateToLandingPage: HttpRequestBuilder =
     http("Navigate to NoVA landing Page")
       .get(s"$baseUrl$landingPage")
       .check(status.is(200))
       .check(regex("Notification of Vehicle Arrivals \\(NOVA\\)").exists)
 
-  val getBeforeYouContinuePage: HttpRequestBuilder =
+  val navigateToBeforeYouContinuePage: HttpRequestBuilder =
     http("Navigate to Before you continue Page")
       .get(s"$baseUrl$beforeYouContinuePage")
       .check(status.is(200))
       .check(saveCsrfToken())
       .check(regex("Before you continue").exists)
 
-  val postBeforeYouContinuePage: HttpRequestBuilder =
+  val navigateFromBeforeYouContinuePage: HttpRequestBuilder =
     http("Continue from Before you continue Page")
       .post(s"$baseUrl$beforeYouContinuePage")
       .formParam("csrfToken", csrfTokenExpr)

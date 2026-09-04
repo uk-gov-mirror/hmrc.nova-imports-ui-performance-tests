@@ -29,12 +29,32 @@ trait IndividualUserSimulation extends PerformanceTestRunner {
   ) withRequests (
     navigateToAuth,
     authLogInAsIndividual,
-    getNovaEntryPoint,
-    getLandingPage,
-    getBeforeYouContinuePage,
-    postBeforeYouContinuePage,
-    getVehicleFromEUPage,
-    postVehicleFromEUPageAsNo,
-    getVehicleOutsideEUPage
+    navigateToNovaEntryPoint,
+    navigateToLandingPage,
+    navigateToBeforeYouContinuePage,
+    navigateFromBeforeYouContinuePage,
+    navigateToVehicleFromEU,
+    selectVehicleFromEUNo,
+    navigateToVehicleOutsideEU
+  )
+
+  setup(
+    "individual-notifying-on-behalf-of-business",
+    "Private individual notifying on behalf of a business purchaser"
+  ) withRequests (
+    navigateToAuth,
+    authLogInAsIndividual,
+    navigateToNovaEntryPoint,
+    navigateToLandingPage,
+    navigateToBeforeYouContinuePage,
+    navigateFromBeforeYouContinuePage,
+    navigateToVehicleFromEU,
+    selectVehicleFromEUYes,
+    navigateToAreYouABusinessOrPrivateIndividual,
+    selectBusiness,
+    navigateToNotifyingAsPurchaserOrOnBehalf,
+    selectNotifyingOnBehalf,
+    navigateToIsThePurchaserABusinessOrPrivateIndividual,
+    selectPurchaserIsBusiness
   )
 }
